@@ -1,20 +1,38 @@
 #!/usr/bin/python3
-"""method that determines if all the boxes can be opened"""
+"""
+Module for canUnlockAll method.
+"""
+
 
 def canUnlockAll(boxes):
+    """
+    Determines if all boxes can be opened.
 
-    if (type(boxes) is not list):
+    Args:
+        boxes (list): A list of lists where each inner list represents a box
+                      and contains keys to other boxes.
+
+    Returns:
+        bool: True if all boxes can be opened, False otherwise.
+    """
+    if not boxes:
         return False
 
-    if (len(boxes) == 0):
-        return False
+    # Initialize a set to keep track of opened boxes
+    opened_boxes = {0}
+    # Initialize a set to keep track of keys
+    keys = set(boxes[0])
 
-    keys = [0]
-    for i in keys:
-        for j in boxes[i]:
-            if j not in keys and j != i and j < len(boxes) and j != 0:
-                keys.append(j)
-    if len(keys) == len(boxes):
-        return True
-    else:
-        return False
+    # Loop until no new keys are found
+    while keys:
+        # Pop a key from the set
+        key = keys.pop()
+        # If the key opens a box that hasn't been opened yet
+        if key < len(boxes) and key not in opened_boxes:
+            # Add the box to the opened_boxes set
+            opened_boxes.add(key)
+            # Add the keys in the opened box to the keys set
+            keys.update(boxes[key])
+
+    # If all boxes have been opened, return True
+    return len(opened_boxes) == len(boxes)
